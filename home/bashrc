@@ -35,10 +35,15 @@ if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
+# Add git branch into prompt.
+git_branch() {
+    local branch
+    branch=$(git branch --show-current 2>/dev/null)
+    [[ -n "$branch" ]] && printf '  %s' "$branch"
+}
 # Custom prompt
-PS1='\[\e[38;5;110m\]\u\[\e[0m\]@\[\e[38;5;151m\]\h\[\e[0m\]:\[\e[38;5;221m\]\w\[\e[0m\]\$ '
-# Alternative custom prompt - "coffee shop vibe"
-# PS1='\[\e[38;5;180m\]\u\[\e[0m\]@\[\e[38;5;137m\]\h\[\e[0m\]:\[\e[38;5;221m\]\w\[\e[38;5;210m\]\$\[\e[0m\] '
+PS1='\[\e[38;5;110m\]\u\[\e[0m\]@\[\e[38;5;151m\]\h\[\e[0m\]:\[\e[38;5;221m\]\w\[\e[0m\]\[\e[38;5;214m\]$(git_branch)\[\e[0m\] \[\e[38;5;151m\]❯\[\e[0m\] '
+
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
