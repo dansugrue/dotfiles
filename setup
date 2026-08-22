@@ -1,11 +1,19 @@
 #!/bin/bash
 
-# Description: Link dotfiles to home directory
+# install GNU coreutils on macOS only (for consistent ls colors across machines)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    if ! command -v brew &> /dev/null; then
+        echo "Homebrew not found — install it first: https://brew.sh"
+    else
+        brew install coreutils
+    fi
+fi
 
-ln -sf ~/dotfiles/bashrc ~/.bashrc
-ln -sf ~/dotfiles/vimrc ~/.vimrc
-ln -sf ~/dotfiles/zshrc ~/.zshrc
-ln -sf ~/dotfiles/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml
-ln -sf ~/dotfiles/tmux.conf ~/.tmux.conf
+# Description: Link dotfiles to home directory
+ln -sf ~/dotfiles/home/bashrc ~/.bashrc
+ln -sf ~/dotfiles/home/vimrc ~/.vimrc
+ln -sf ~/dotfiles/home/zshrc ~/.zshrc
+ln -sf ~/dotfiles/config/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml
+ln -sf ~/dotfiles/home/tmux.conf ~/.tmux.conf
 
 echo "Dotfiles linked"

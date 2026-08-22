@@ -1,0 +1,12 @@
+setopt PROMPT_SUBST
+git_branch() {
+    local branch
+    branch=$(git branch --show-current 2>/dev/null)
+    [[ -n "$branch" ]] && printf '  %s' "$branch"
+}
+
+PS1='%F{#d3869b}dan%f@%F{#FF4F5E}%m%f:%F{#83a598}%~%f%F{#d79921}$(git_branch)%f %F{#FF4F5E}❯%f '
+
+alias ls='gls --color=auto'
+alias ll='gls -alF --color=auto'
+alias la='gls -A --color=auto'
