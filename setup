@@ -1,21 +1,55 @@
 #!/bin/bash
 
-# install GNU coreutils on macOS only (for consistent ls colors across machines)
 if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
     if ! command -v brew &> /dev/null; then
         echo "Homebrew not found — install it first: https://brew.sh"
     else
         brew install coreutils &> /dev/null
+
+        if ! brew list --cask font-jetbrains-mono-nerd-font &> /dev/null; then
+            brew install --cask font-jetbrains-mono-nerd-font &> /dev/null
+        fi
+    fi
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # Linux
+    FONT_DIR="$HOME/.local/share/fonts"
+    if ! fc-list 2>/dev/null | grep -qi "JetBrainsMono Nerd Font"; then
+        mkdir -p "$FONT_DIR"
+        curl -fLo /tmp/JetBrainsMono.zip \
+          https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
+        unzip -o /tmp/JetBrainsMono.zip -d "$FONT_DIR" &> /dev/null
+        fc-cache -f "$FONT_DIR" &> /dev/null
+        rm /tmp/JetBrainsMono.zip
     fi
 fi
 
 # Description: Link dotfiles to home directory
 mkdir -p ~/.config/alacritty
 
-ln -sf ~/dotfiles/home/bashrc ~/.bashrc
+HOST=$(hostname -s)
+
+case "$HOST" in
+  cato)
+    ln -sf ~/dotfiles/home/zshrc_cato ~/.zshrc
+    ;;
+  maclab)
+    ln -sf ~/dotfiles/home/zshrc_maclab ~/.zshrc
+    ;;
+  homelab)
+    ln -sf ~/dotfiles/home/bashrc_homelab ~/.bashrc
+    ;;
+  *)
+    if [ -n "$ZSH_VERSION" ]; then
+        ln -sf ~/dotfiles/home/zshrc_default ~/.zshrc
+    else
+        ln -sf ~/dotfiles/home/bashrc_default ~/.bashrc
+    fi
+    ;;
+esac
+
 ln -sf ~/dotfiles/home/vimrc ~/.vimrc
-ln -sf ~/dotfiles/home/zshrc ~/.zshrc
 ln -sf ~/dotfiles/config/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml
 ln -sf ~/dotfiles/home/tmux.conf ~/.tmux.conf
 
-echo "Dotfiles linked"
+echo "Dotfiles linked successfully."
