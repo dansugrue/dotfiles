@@ -5,22 +5,10 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     if ! command -v brew &> /dev/null; then
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
-
-    brew install coreutils
-    brew install --cask font-jetbrains-mono-nerd-font
-
-elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    # Linux: install font manually
-    mkdir -p ~/.local/share/fonts
-    curl -fLo ~/.local/share/fonts/JetBrainsMono.zip \
-      https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
-    unzip -o ~/.local/share/fonts/JetBrainsMono.zip -d ~/.local/share/fonts
-    rm ~/.local/share/fonts/JetBrainsMono.zip
-    fc-cache -f ~/.local/share/fonts &> /dev/null
+    brew list coreutils &>/dev/null || brew install coreutils
 fi
 
 # Description: Link dotfiles to home directory
-mkdir -p ~/.config/alacritty
 
 HOST=$(hostname -s)
 
@@ -35,16 +23,11 @@ case "$HOST" in
     ln -sf ~/dotfiles/home/bashrc_homelab ~/.bashrc
     ;;
   *)
-    if [ -n "$ZSH_VERSION" ]; then
-        ln -sf ~/dotfiles/home/zshrc_default ~/.zshrc
-    else
-        ln -sf ~/dotfiles/home/bashrc_default ~/.bashrc
-    fi
+    ln -sf ~/dotfiles/home/bashrc_default ~/.bashrc
     ;;
 esac
 
 ln -sf ~/dotfiles/home/vimrc ~/.vimrc
-ln -sf ~/dotfiles/config/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml
 ln -sf ~/dotfiles/home/tmux.conf ~/.tmux.conf
 
 echo "Dotfiles linked successfully."
