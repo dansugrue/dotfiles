@@ -1,27 +1,22 @@
 #!/bin/bash
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    # macOS
+    # macOS: install Homebrew if missing
     if ! command -v brew &> /dev/null; then
-        echo "Homebrew not found — install it first: https://brew.sh"
-    else
-        brew install coreutils &> /dev/null
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
 
-        if ! brew list --cask font-jetbrains-mono-nerd-font &> /dev/null; then
-            brew install --cask font-jetbrains-mono-nerd-font &> /dev/null
-        fi
-    fi
+    brew install coreutils
+    brew install --cask font-jetbrains-mono-nerd-font
+
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    # Linux
-    FONT_DIR="$HOME/.local/share/fonts"
-    if ! fc-list 2>/dev/null | grep -qi "JetBrainsMono Nerd Font"; then
-        mkdir -p "$FONT_DIR"
-        curl -fLo /tmp/JetBrainsMono.zip \
-          https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
-        unzip -o /tmp/JetBrainsMono.zip -d "$FONT_DIR" &> /dev/null
-        fc-cache -f "$FONT_DIR" &> /dev/null
-        rm /tmp/JetBrainsMono.zip
-    fi
+    # Linux: install font manually
+    mkdir -p ~/.local/share/fonts
+    curl -fLo ~/.local/share/fonts/JetBrainsMono.zip \
+      https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
+    unzip -o ~/.local/share/fonts/JetBrainsMono.zip -d ~/.local/share/fonts
+    rm ~/.local/share/fonts/JetBrainsMono.zip
+    fc-cache -f ~/.local/share/fonts &> /dev/null
 fi
 
 # Description: Link dotfiles to home directory
