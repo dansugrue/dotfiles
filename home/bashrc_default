@@ -42,7 +42,7 @@ git_branch() {
     [[ -n "$branch" ]] && printf ' 󰘬 %s' "$branch"
 }
 # Custom prompt
-PS1='\[\e[38;5;244m\]\u\[\e[0m\]@\[\e[38;5;244m\]\h\[\e[0m\] \[\e[38;5;109m\]\w\[\e[0m\]\[\e[38;5;214m\]$(git_branch)\[\e[0m\]\n\[\e[38;5;244m\]\$\[\e[0m\] '
+PS1='\[\e[38;5;244m\]\u\[\e[0m\]@\[\e[38;5;244m\]\h\[\e[0m\] \[\e[38;5;109m\]\w\[\e[0m\]\[\e[38;5;214m\]$(git_branch)\[\e[0m\]\n\[\e[38;5;244m\]❯\[\e[0m\] '
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
