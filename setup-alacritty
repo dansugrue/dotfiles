@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# One-off setup for the local terminal emulator. NOT part of the multi-device
+# dotfiles flow — run this by hand, only on the machine you actually sit at
+# with a screen (cato). SSH'd-into boxes never need this.
+set -uo pipefail
+
+DOTFILES="$HOME/dotfiles"
+
+run_quiet() {
+  local desc="$1"; shift
+  local output
+  if ! output=$("$@" 2>&1); then
+    echo "✗ $desc failed:"
+    echo "$output"
+    exit 1
+  fi
+}
+
+if ! command -v brew &>/dev/null; then
+  run_quiet "Installing Homebrew" env NONINTERACTIVE=1 /bin/bash -c \
+    "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+brew list --cask font-jetbrains-mono-nerd-font &>/dev/null || \
+  run_quiet "Installing JetBrainsMono Nerd Font" \
+    brew install --cask font-jetbrains-mono-nerd-font
+
+mkdir -p "$HOME/.config/alacritty"
+ln -sf "$DOTFILES/config/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
+
+echo "✓ Alacritty configured."
