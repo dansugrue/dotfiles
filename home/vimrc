@@ -64,3 +64,6 @@ if filereadable("/etc/vim/vimrc.local")
   source /etc/vim/vimrc.local
 endif
 
+" add line number and collumn separator
+set number
+highlight LineNr ctermfg=237 guifg=#504945
