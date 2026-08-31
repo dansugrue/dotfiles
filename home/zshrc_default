@@ -1,0 +1,16 @@
+setopt PROMPT_SUBST
+
+# Add git branch into prompt.
+git_branch() {
+    local branch
+    branch=$(git branch --show-current 2>/dev/null)
+    [[ -n "$branch" ]] && printf ' 󰘬 %s' "$branch"
+}
+
+# Custom prompt
+PS1='%F{#8c8c8c}%n%f@%F{#8c8c8c}%m%f %F{#8ec07c}%~%f%F{#fabd2f}$(git_branch)%f
+%F{#8c8c8c}❯%f '
+
+alias ls='gls --color=auto'
+alias ll='gls -alF --color=auto'
+alias la='gls -A --color=auto'

@@ -24,6 +24,7 @@ case "$HOST" in
     ;;
   *)
     ln -sf ~/dotfiles/home/bashrc_default ~/.bashrc
+    ln -sf ~/dotfiles/home/zshrc_default ~/.zshrc
     ;;
 esac
 
